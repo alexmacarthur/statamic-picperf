@@ -25,6 +25,6 @@ class PicPerf extends Modifier
             return $this->transformUrl($content);
         }
 
-        return $this->transformImageHtml($content);
+        return $this->transformMarkup($content);
     }
 }

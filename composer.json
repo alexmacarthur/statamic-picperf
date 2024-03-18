@@ -21,10 +21,12 @@
   },
   "config": {
     "allow-plugins": {
-      "pestphp/pest-plugin": true
+      "pestphp/pest-plugin": true,
+      "pixelfear/composer-dist-plugin": true
     }
   },
   "require": {
-    "illuminate/support": "*"
+    "illuminate/support": "*",
+    "statamic/cms": "^3.2|^4.0"
   }
 }
