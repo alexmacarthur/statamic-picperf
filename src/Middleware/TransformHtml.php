@@ -5,26 +5,39 @@ namespace PicPerf\StatamicPicPerf\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
+use PicPerf\StatamicPicPerf\Trait\Configurable;
 use PicPerf\StatamicPicPerf\Trait\Transformable;
 
 class TransformHtml
 {
-    use Transformable;
+    use Transformable, Configurable;
 
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
 
-        // $config = config('picperf');
+        if (!$this->isGetRequest($request) || !$this->isHtmlResponse($response)) {
+            return $response;
+        }
 
-        // dd($config);
+        if (!$this->getConfig('transform_all', false)) {
+            return $response;
+        }
 
-        // if ($response instanceof Response) {
-        //     $content = $response->getContent();
-        //     $modifiedContent = $this->transformMarkup($content);
-        //     $response->setContent($modifiedContent);
-        // }
+        $content = $response->getContent();
+        $response->setContent($this->transformMarkup($content));
 
         return $response;
+    }
+
+    private function isGetRequest(Request $request): bool
+    {
+        return $request->method() === 'GET';
+    }
+
+    private function isHtmlResponse(Response $response): bool
+    {
+        return Str::of($response->headers->get('content-type'))->contains('text/html');
     }
 }
