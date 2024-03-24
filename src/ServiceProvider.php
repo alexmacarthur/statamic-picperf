@@ -25,7 +25,9 @@ class ServiceProvider extends AddonServiceProvider
     {
         $configPath = config_path('picperf.php');
 
-        $this->mergeConfigFrom($configPath, 'statamic-picperf');
+        if (file_exists($configPath)) {
+            $this->mergeConfigFrom($configPath, 'statamic-picperf');
+        }
 
         $this->publishes([
             __DIR__ . '/../config/picperf.php' => config_path('picperf.php'),
