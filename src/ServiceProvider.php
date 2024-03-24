@@ -18,6 +18,19 @@ class ServiceProvider extends AddonServiceProvider
 
     public function bootAddon()
     {
-        // dd("HIII");
+        $this->bootAddonConfig();
+    }
+
+    protected function bootAddonConfig(): self
+    {
+        $configPath = config_path('picperf.php');
+
+        $this->mergeConfigFrom($configPath, 'statamic-picperf');
+
+        $this->publishes([
+            __DIR__ . '/../config/picperf.php' => config_path('picperf.php'),
+        ], 'picperf-config');
+
+        return $this;
     }
 }
