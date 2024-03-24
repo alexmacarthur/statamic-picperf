@@ -21,7 +21,7 @@ class TransformHtml
             return $response;
         }
 
-        if (!$this->getConfig('transform_all', false)) {
+        if (!$this->getConfig('transform_all_markup', false)) {
             return $response;
         }
 

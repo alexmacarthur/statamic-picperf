@@ -2,10 +2,12 @@
 
 namespace PicPerf\StatamicPicPerf;
 
-$testClass = new class()
+class TestClass
 {
     use \PicPerf\StatamicPicPerf\Trait\Transformable;
-};
+}
+
+$testClass = new TestClass();
 
 describe('transforming URLs', function () use ($testClass) {
     it('returns same URL in local environment', function () use ($testClass) {
@@ -33,15 +35,30 @@ describe('transforming URLs', function () use ($testClass) {
     });
 
     it('returns the same URL if it is a relative path', function () use ($testClass) {
-        $result = $testClass->transformUrl('/something.jpg');
+        $partialMock = $this->createPartialMock($testClass::class, ['getConfig']);
+        $partialMock->method('getConfig')->willReturn('https://macarthur.me');
 
-        expect($result)->toBe('/something.jpg');
+        $result = $partialMock->transformUrl('/something.jpg');
+
+        expect($result)->toBe('https://picperf.io/https://macarthur.me/something.jpg');
     });
 
-    it('returns the unchanged URL when parsing fails', function () use ($testClass) {
-        $result = $testClass->transformUrl('blahblahblah');
+    it('returns the same value if it is an invalid URL, even if there is a host configured', function () use ($testClass) {
+        $partialMock = $this->createPartialMock($testClass::class, ['getConfig']);
+        $partialMock->method('getConfig')->willReturn('https://macarthur.me');
+
+        $result = $partialMock->transformUrl('blahblahblah');
 
         expect($result)->toBe('blahblahblah');
+    });
+
+    it('returns the same url if a host is not configured', function () use ($testClass) {
+        $partialMock = $this->createPartialMock($testClass::class, ['getConfig']);
+        $partialMock->method('getConfig')->willReturn(null);
+
+        $result = $partialMock->transformUrl('/something.jpg');
+
+        expect($result)->toBe('/something.jpg');
     });
 });
 

@@ -6,11 +6,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 const PIC_PERF_HOST = 'https://picperf.io/';
-const PICPERF_IMAGE_URL_PATTERN = '/https?:\/\/[^ ,]+\.(jpg|jpeg|png|gif|webp|avif)/i';
+const IMAGE_URL_PATTERN = '/(?:https?:\/)?\/[^ ,]+\.(jpg|jpeg|png|gif|webp|avif)/i';
 
 trait Transformable
 {
-    use Urlable;
+    use Urlable, Configurable;
 
     public function transformUrl($url): string
     {
@@ -24,6 +24,20 @@ trait Transformable
 
             // It's a relative path, or otherwise invalid URL.
             if (!$this->isValidUrl($url)) {
+
+                // The host is configured! Prepend it.
+                $configuredHost = Str::of($this->getConfig('host'))
+                    ->trim()
+                    ->replaceEnd('/', '')
+                    ->toString();
+
+                if ($configuredHost && $urlString->startsWith('/')) {
+                    return $urlString
+                        ->prepend($configuredHost)
+                        ->prepend(PIC_PERF_HOST)
+                        ->toString();
+                }
+
                 return $url;
             }
 
@@ -54,8 +68,7 @@ trait Transformable
         // Find every image tag.
         return preg_replace_callback('/(<img)[^\>]*(\>|>)/is', function ($match) {
 
-            // Find every URL.
-            return preg_replace_callback('/(https?:\/\/[^ ,]+)?/i', function ($subMatch) {
+            return preg_replace_callback(IMAGE_URL_PATTERN, function ($subMatch) {
                 return $this->transformUrl($subMatch[0]);
             }, $match[0]);
         }, $content);
@@ -67,7 +80,7 @@ trait Transformable
         return preg_replace_callback('/<style.*?>(.*?)<\/style>/is', function ($match) {
 
             // Find every URL.
-            return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) {
+            return preg_replace_callback(IMAGE_URL_PATTERN, function ($subMatch) {
                 return $this->transformUrl($subMatch[0]);
             }, $match[0]);
         }, $content);
@@ -79,7 +92,7 @@ trait Transformable
         return preg_replace_callback('/style=(?:"|\')([^"]*)(?:"|\')/is', function ($match) {
 
             // Find every URL.
-            return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) {
+            return preg_replace_callback(IMAGE_URL_PATTERN, function ($subMatch) {
                 return $this->transformUrl($subMatch[0]);
             }, $match[0]);
         }, $content);
