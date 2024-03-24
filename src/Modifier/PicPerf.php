@@ -15,11 +15,9 @@ class PicPerf extends Modifier
      * Transform a URL or HTML content to use PicPerf URLs.
      *
      * @param string  $value   The value to be modified
-     * @param array  $params   Any parameters used in the modifier
-     * @param array  $context  Contextual values
      * @return string
      */
-    public function index(string $content, $params, $context): string
+    public function index(string $content): string
     {
         if ($this->isValidUrl($content)) {
             return $this->transformUrl($content);
