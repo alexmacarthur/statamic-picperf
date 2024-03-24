@@ -1,5 +1,6 @@
 {
   "name": "picperf/statamic-picperf",
+  "license": "MIT",
   "autoload": {
     "psr-4": {
       "PicPerf\\StatamicPicPerf\\": "src"
@@ -7,8 +8,8 @@
   },
   "extra": {
     "statamic": {
-      "name": "Statamic PicPerf",
-      "description": "Statamic PicPerf addon"
+      "name": "PicPerf for Statamic",
+      "description": "Modern image optimization for the modern web."
     },
     "laravel": {
       "providers": [
