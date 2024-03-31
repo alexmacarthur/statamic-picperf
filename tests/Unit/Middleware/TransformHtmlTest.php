@@ -54,7 +54,7 @@ it('returns early when config option is disabled', function () {
         return $response;
     };
 
-    $partialMock->method('getConfig')->willReturn(false);
+    $partialMock->method('getConfig')->willReturn(false, false);
 
     $partialMock->expects($this->never())->method('transformMarkup');
 
@@ -64,7 +64,7 @@ it('returns early when config option is disabled', function () {
 });
 
 it('transforms the HTML', function () {
-    $partialMock = $this->createPartialMock(TransformHtml::class, ['getConfig', 'transformMarkup']);
+    $partialMock = $this->createPartialMock(TransformHtml::class, ['getConfig']);
 
     $request = new \Illuminate\Http\Request();
     $request->setMethod('GET');
@@ -76,10 +76,53 @@ it('transforms the HTML', function () {
         return $response;
     };
 
-    $partialMock->method('getConfig')->willReturn(true);
-    $partialMock->method('transformMarkup')->willReturn('<img src="https://picperf.io/https://example.com/image.jpg">');
+    $partialMock->method('getConfig')->willReturn(true, false);
 
     $result = $partialMock->handle($request, $next);
 
     expect($result->getContent())->toBe('<img src="https://picperf.io/https://example.com/image.jpg">');
+});
+
+describe('adding sitemap_path', function () {
+    it('adds root path when on home page', function () {
+        $partialMock = $this->createPartialMock(TransformHtml::class, ['getConfig']);
+
+        $request = new \Illuminate\Http\Request();
+        $request->setMethod('GET');
+        $request->server->set('REQUEST_URI', '/');
+        $response = new \Illuminate\Http\Response();
+        $response->headers->set('content-type', 'text/html');
+        $response->setContent('<img src="https://example.com/image.jpg">');
+
+        $next = function () use ($response) {
+            return $response;
+        };
+
+        $partialMock->method('getConfig')->willReturn(true);
+
+        $result = $partialMock->handle($request, $next);
+
+        expect($result->getContent())->toBe('<img src="https://picperf.io/https://example.com/image.jpg?sitemap_path=/">');
+    });
+
+    it('adds non-root path when on home page', function () {
+        $partialMock = $this->createPartialMock(TransformHtml::class, ['getConfig']);
+
+        $request = new \Illuminate\Http\Request();
+        $request->setMethod('GET');
+        $request->server->set('REQUEST_URI', '/some/other/page?with=query');
+        $response = new \Illuminate\Http\Response();
+        $response->headers->set('content-type', 'text/html');
+        $response->setContent('<img src="https://example.com/image.jpg">');
+
+        $next = function () use ($response) {
+            return $response;
+        };
+
+        $partialMock->method('getConfig')->willReturn(true);
+
+        $result = $partialMock->handle($request, $next);
+
+        expect($result->getContent())->toBe('<img src="https://picperf.io/https://example.com/image.jpg?sitemap_path=/some/other/page">');
+    });
 });

@@ -25,10 +25,23 @@ class TransformHtml
             return $response;
         }
 
-        $content = $response->getContent();
-        $response->setContent($this->transformMarkup($content));
+        $response->setContent(
+            $this->transformMarkup(
+                $response->getContent(),
+                $this->getSitemapPath($request)
+            ),
+        );
 
         return $response;
+    }
+
+    private function getSitemapPath(Request $request): ?string
+    {
+        if (!$this->getConfig('add_sitemap_paths', false)) {
+            return null;
+        }
+
+        return $this->getPath($request);
     }
 
     private function isGetRequest(Request $request): bool
@@ -39,5 +52,17 @@ class TransformHtml
     private function isHtmlResponse(Response $response): bool
     {
         return Str::of($response->headers->get('content-type'))->contains('text/html');
+    }
+
+    private function getPath(Request $request): string
+    {
+        $path = $request->path();
+
+        // Ensure a leading slash.
+        if (!str_starts_with($path, '/')) {
+            $path = '/' . $path;
+        }
+
+        return $path;
     }
 }

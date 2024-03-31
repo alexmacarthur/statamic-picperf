@@ -10,7 +10,18 @@ trait Transformable
 {
     use Urlable, Configurable;
 
-    public function transformUrl($url): string
+    public function transformUrl(string $url, ?string $sitemapPath = null): string
+    {
+        $url = $this->purelyTransform($url);
+
+        if ($sitemapPath) {
+            return str_replace('%2F', '/', $this->appendQueryParams($url, ['sitemap_path' => $sitemapPath]));
+        }
+
+        return $url;
+    }
+
+    private function purelyTransform(string $url): string
     {
         try {
             $urlString = Str::of($url);
@@ -55,46 +66,48 @@ trait Transformable
         }
     }
 
-    public function transformMarkup($content)
+    public function transformMarkup($content, ?string $sitemapPath = null): string
     {
         return $this->transformImageHtml(
             $this->transformStyleTags(
-                $this->transformInlineStyles($content)
-            )
+                $this->transformInlineStyles($content, $sitemapPath),
+                $sitemapPath
+            ),
+            $sitemapPath
         );
     }
 
-    private function transformImageHtml($content)
+    private function transformImageHtml($content, ?string $sitemapPath = null): string
     {
         // Find every image tag.
-        return preg_replace_callback('/(<img)[^\>]*(\>|>)/is', function ($match) {
+        return preg_replace_callback('/(<img)[^\>]*(\>|>)/is', function ($match) use ($sitemapPath) {
 
-            return preg_replace_callback(Constants::IMAGE_URL_PATTERN, function ($subMatch) {
-                return $this->transformUrl($subMatch[0]);
+            return preg_replace_callback(Constants::IMAGE_URL_PATTERN, function ($subMatch) use ($sitemapPath) {
+                return $this->transformUrl($subMatch[0], $sitemapPath);
             }, $match[0]);
         }, $content);
     }
 
-    private function transformStyleTags($content)
+    private function transformStyleTags($content, ?string $sitemapPath = null): string
     {
         // Find every style tag.
-        return preg_replace_callback('/<style.*?>(.*?)<\/style>/is', function ($match) {
+        return preg_replace_callback('/<style.*?>(.*?)<\/style>/is', function ($match) use ($sitemapPath) {
 
             // Find every URL.
-            return preg_replace_callback(Constants::IMAGE_URL_PATTERN, function ($subMatch) {
-                return $this->transformUrl($subMatch[0]);
+            return preg_replace_callback(Constants::IMAGE_URL_PATTERN, function ($subMatch) use ($sitemapPath) {
+                return $this->transformUrl($subMatch[0], $sitemapPath);
             }, $match[0]);
         }, $content);
     }
 
-    private function transformInlineStyles($content)
+    private function transformInlineStyles($content, ?string $sitemapPath = null): string
     {
         // Find every inline style.
-        return preg_replace_callback('/style=(?:"|\')([^"]*)(?:"|\')/is', function ($match) {
+        return preg_replace_callback('/style=(?:"|\')([^"]*)(?:"|\')/is', function ($match) use ($sitemapPath) {
 
             // Find every URL.
-            return preg_replace_callback(Constants::IMAGE_URL_PATTERN, function ($subMatch) {
-                return $this->transformUrl($subMatch[0]);
+            return preg_replace_callback(Constants::IMAGE_URL_PATTERN, function ($subMatch) use ($sitemapPath) {
+                return $this->transformUrl($subMatch[0], $sitemapPath);
             }, $match[0]);
         }, $content);
     }

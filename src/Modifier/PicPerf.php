@@ -17,12 +17,16 @@ class PicPerf extends Modifier
      * @param string  $value   The value to be modified
      * @return string
      */
-    public function index(string $content): string
+    public function index(string $content, $params, $context): string
     {
+        $sitemapPath = collect($params)->contains('add_to_sitemap')
+        ? $context['current_uri']
+        : null;
+
         if ($this->isValidUrl($content)) {
-            return $this->transformUrl($content);
+            return $this->transformUrl($content, $sitemapPath);
         }
 
-        return $this->transformMarkup($content);
+        return $this->transformMarkup($content, $sitemapPath);
     }
 }

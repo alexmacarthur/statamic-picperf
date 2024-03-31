@@ -60,6 +60,12 @@ describe('transforming URLs', function () use ($testClass) {
 
         expect($result)->toBe('/something.jpg');
     });
+
+    it('appends sitemap_path query param if provided', function () use ($testClass) {
+        $result = $testClass->transformUrl('http://urmom.com/something.jpg', '/some/path');
+
+        expect($result)->toBe('https://picperf.io/http://urmom.com/something.jpg?sitemap_path=/some/path');
+    });
 });
 
 describe('transforming <img> tags', function () use ($testClass) {
@@ -80,6 +86,12 @@ describe('transforming <img> tags', function () use ($testClass) {
 
         expect($result)->toBe('<img src="https://picperf.io/http://urmom.com/something.jpg" />');
     });
+
+    it('appends sitemap_path query param if provided', function () use ($testClass) {
+        $result = $testClass->transformMarkup('<img src="http://urmom.com/something.jpg" />', '/some/path');
+
+        expect($result)->toBe('<img src="https://picperf.io/http://urmom.com/something.jpg?sitemap_path=/some/path" />');
+    });
 });
 
 describe('transforming <style> tags', function () use ($testClass) {
@@ -99,5 +111,11 @@ describe('transforming <style> tags', function () use ($testClass) {
         $result = $testClass->transformMarkup('<style>.something { background-image: url(https://picperf.io/http://urmom.com/something.jpg); }</style>');
 
         expect($result)->toBe('<style>.something { background-image: url(https://picperf.io/http://urmom.com/something.jpg); }</style>');
+    });
+
+    it('appends sitemap_path query param if provided', function () use ($testClass) {
+        $result = $testClass->transformMarkup('<style>.something { background-image: url(http://urmom.com/something.jpg); }</style>', '/some/path');
+
+        expect($result)->toBe('<style>.something { background-image: url(https://picperf.io/http://urmom.com/something.jpg?sitemap_path=/some/path); }</style>');
     });
 });
