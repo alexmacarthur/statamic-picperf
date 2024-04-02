@@ -8,6 +8,7 @@
 - Serve the modern format that's _actually_ lighter, and only if your visitor's browser supports it.
 - Aggressively cache the bananas out of your images starting from the browser, all the way up to the global CDN.
 - The original versions of your images remain untouched.
+- Use the [auto-generated sitemap](https://picperf.io/docs/sitemap) for an extra boost of SEO.
 
 ## Getting Started
 
@@ -76,6 +77,43 @@ return [
     'host' => 'https://macarthur.me',
 ];
 ```
+
+### Adding Images to the Auto-Generated Sitemap
+
+PicPerf will automatically [generate an image sitemap](https://picperf.io/docs/sitemap) for you based on image requests from the last 90 days.
+
+### Enabling Image Sitemap Inclusions
+
+By default, no images are included in this sitemap. To enable it for all images, set the `add_sitemap_path` configuration property to `true`:
+
+```php
+<?php
+
+// config/picperf.php
+
+return [
+    // ... other configuration values
+    'add_sitemap_paths' => true,
+];
+```
+
+Setting this will add a `sitemap_path` query parameter to each image based on the current page path.
+
+### Opting in to an Image Sitemap via Modifier
+
+If you'd like more control over which images are included in the sitemap, use the `add_to_sitemap` parameter on the `picperf` modifier:
+
+```
+{{ featured_image }}
+    <img src="{{ url | picperf:add_to_sitemap }}" alt="{{ alt }}" />
+{{ /featured_image }}
+```
+
+Again, this will cause the `sitemap_path` parameter to be appended with the current page.
+
+### Adding a Sitemap Endpoint to Your Domain
+
+Your sitemap must live on a domain that you can verify within the Google Search Console. To serve the auto-generated sitemap through your Statmaic site, see the [instructions here](https://picperf.io/docs/sitemap/endpoint#statamic-or-laravel).
 
 ## More Documentation
 
