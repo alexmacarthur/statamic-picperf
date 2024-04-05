@@ -99,7 +99,7 @@ return [
 
 Setting this will add a `sitemap_path` query parameter to each image based on the current page path.
 
-### Opting in to an Image Sitemap via Modifier
+#### Adding Images to Sitemap via Modifier
 
 If you'd like more control over which images are included in the sitemap, use the `add_to_sitemap` parameter on the `picperf` modifier:
 
@@ -111,9 +111,30 @@ If you'd like more control over which images are included in the sitemap, use th
 
 Again, this will cause the `sitemap_path` parameter to be appended with the current page.
 
-### Adding a Sitemap Endpoint to Your Domain
+#### Auto-Registered Sitemap Endpoint
 
-Your sitemap must live on a domain that you can verify within the Google Search Console. To serve the auto-generated sitemap through your Statmaic site, see the [instructions here](https://picperf.io/docs/sitemap/endpoint#statamic-or-laravel).
+By default, this addon will automatically register an image sitemap route at `https://ur-site.com/picperf/sitemap`. All this does is proxy the contents of the auto-generated sitemap at `https://picperf.io/sitemap/ur-site.com`. The benefit, however, is that Google will be able to successfully parse it since it'll be served from your domain.
+
+If you _don't_ want a sitemap endpoint to be registered, set the `register_sitemap` configuration key to `false`:
+
+```php
+<?php
+
+// config/picperf.php
+
+return [
+    // ... other configuration values
+    'register_sitemap' => false,
+];
+```
+
+#### Auto-Added Sitemap robots.txt Entry
+
+On installation, the addon will also add a `Sitemap` entry to your `robots.txt`. If it was removed and you ever need to add it again, you can run the following command:
+
+```
+php please picperf:register-sitemap
+```
 
 ## More Documentation
 
