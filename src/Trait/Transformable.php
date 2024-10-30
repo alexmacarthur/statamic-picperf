@@ -32,7 +32,7 @@ trait Transformable
             }
 
             // It's not a valid URL.
-            if (!$this->isValidUrl($url)) {
+            if (! $this->isValidUrl($url)) {
                 return $url;
             }
 
@@ -43,7 +43,7 @@ trait Transformable
                     ->replaceEnd('/', '')
                     ->toString();
 
-                if (!empty($configuredHost)) {
+                if (! empty($configuredHost)) {
                     return $urlString
                         ->prepend($configuredHost)
                         ->prepend(Constants::PIC_PERF_HOST)

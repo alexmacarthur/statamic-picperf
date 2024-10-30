@@ -17,11 +17,11 @@ class TransformHtml
     {
         $response = $next($request);
 
-        if (!$this->isGetRequest($request) || !$this->isHtmlResponse($response)) {
+        if (! $this->isGetRequest($request) || ! $this->isHtmlResponse($response)) {
             return $response;
         }
 
-        if (!$this->getConfig('transform_all_markup', true)) {
+        if (! $this->getConfig('transform_all_markup', true)) {
             return $response;
         }
 
@@ -37,7 +37,7 @@ class TransformHtml
 
     private function getSitemapPath(Request $request): ?string
     {
-        if (!$this->getConfig('add_sitemap_paths', false)) {
+        if (! $this->getConfig('add_sitemap_paths', false)) {
             return null;
         }
 
@@ -59,8 +59,8 @@ class TransformHtml
         $path = $request->path();
 
         // Ensure a leading slash.
-        if (!str_starts_with($path, '/')) {
-            $path = '/' . $path;
+        if (! str_starts_with($path, '/')) {
+            $path = '/'.$path;
         }
 
         return $path;

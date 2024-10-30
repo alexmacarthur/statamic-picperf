@@ -75,6 +75,15 @@ describe('transforming <img> tags', function () use ($testClass) {
         expect($result)->toBe('<img src="https://picperf.io/http://urmom.com/something.jpg" />');
     });
 
+    it('transforms relative paths correctly when host is set', function () use ($testClass) {
+        $partialMock = $this->createPartialMock($testClass::class, ['getConfig']);
+        $partialMock->method('getConfig')->willReturn('https://macarthur.me');
+
+        $result = $partialMock->transformMarkup("<img src='/something.jpg' style='display: block;' />");
+
+        expect($result)->toBe("<img src='https://picperf.io/https://macarthur.me/something.jpg' style='display: block;' />");
+    });
+
     it('transforms multiple image URLs correctly', function () use ($testClass) {
         $result = $testClass->transformMarkup('<img src="http://urmom.com/something.jpg" /><img src="http://urmom.com/somethingelse.jpg" />');
 

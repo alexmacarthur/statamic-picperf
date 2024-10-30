@@ -20,7 +20,7 @@ trait Urlable
     public function appendQueryParams(string $url, array $params): string
     {
         $parsedUrl = parse_url($url);
-        if (!isset($parsedUrl['query'])) {
+        if (! isset($parsedUrl['query'])) {
             $parsedUrl['query'] = '';
         }
 
@@ -29,11 +29,11 @@ trait Urlable
         $parsedUrl['query'] = http_build_query($mergedParams);
 
         $newUrl = isset($parsedUrl['scheme']) && isset($parsedUrl['host'])
-        ? $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . $parsedUrl['path'] . '?' . $parsedUrl['query']
-        : $parsedUrl['path'] . '?' . $parsedUrl['query'];
+        ? $parsedUrl['scheme'].'://'.$parsedUrl['host'].$parsedUrl['path'].'?'.$parsedUrl['query']
+        : $parsedUrl['path'].'?'.$parsedUrl['query'];
 
         if (isset($parsedUrl['fragment'])) {
-            $newUrl .= '#' . $parsedUrl['fragment'];
+            $newUrl .= '#'.$parsedUrl['fragment'];
         }
 
         return $newUrl;

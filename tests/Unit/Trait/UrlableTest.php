@@ -27,7 +27,7 @@ describe('isValidUrl()', function () use ($testClass) {
     });
 });
 
-describe("isRootRelativeUrl()", function () use ($testClass) {
+describe('isRootRelativeUrl()', function () use ($testClass) {
     it('returns true for a root-relative URL', function () use ($testClass) {
         $result = $testClass->isRootRelativeUrl('/something.jpg');
 
@@ -47,7 +47,7 @@ describe("isRootRelativeUrl()", function () use ($testClass) {
     });
 });
 
-describe("appendQueryParams()", function () use ($testClass) {
+describe('appendQueryParams()', function () use ($testClass) {
     it('appends query params to a URL', function () use ($testClass) {
         $result = $testClass->appendQueryParams('http://urmom.com/something.jpg', ['foo' => 'bar']);
 

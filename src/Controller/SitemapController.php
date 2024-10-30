@@ -15,11 +15,11 @@ class SitemapController extends Controller
     {
         $host = $this->getConfig('host', false);
 
-        if (!$host || !$this->getConfig('register_sitemap', true)) {
-            return (new Response('Sitemap not found.', 404));
+        if (! $host || ! $this->getConfig('register_sitemap', true)) {
+            return new Response('Sitemap not found.', 404);
         }
 
-        $domain = parse_url($host)["host"];
+        $domain = parse_url($host)['host'];
         $response = Http::get("https://picperf.io/sitemap/$domain");
         $contents = $response->body();
 

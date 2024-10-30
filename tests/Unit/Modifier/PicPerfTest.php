@@ -4,7 +4,7 @@ namespace PicPerf\StatamicPicPerf;
 
 use PicPerf\StatamicPicPerf\Modifier\PicPerf;
 
-describe("transformMarkup()", function () {
+describe('transformMarkup()', function () {
     it('is not called when URL is valid', function () {
         $picPerfMock = $this->createPartialMock(PicPerf::class, ['transformMarkup', 'transformUrl']);
 
@@ -35,8 +35,8 @@ describe("transformMarkup()", function () {
     });
 });
 
-describe("transformUrl()", function () {
-    it("is not called when HTML is passed", function () {
+describe('transformUrl()', function () {
+    it('is not called when HTML is passed', function () {
         $picPerfMock = $this->createPartialMock(PicPerf::class, ['transformMarkup', 'transformUrl']);
 
         $picPerfMock->expects($this->never())->method('transformUrl');
@@ -51,7 +51,7 @@ describe("transformUrl()", function () {
         expect($result)->toBe('markup');
     });
 
-    it("adds sitemap_path query param if provided", function () {
+    it('adds sitemap_path query param if provided', function () {
         $picPerfMock = $this->createPartialMock(PicPerf::class, ['transformMarkup', 'transformUrl']);
 
         $picPerfMock->expects($this->once())->method('transformUrl')->with('https://example.com/image.jpg', '/some/path')->willReturn('https://picperf.io/https://example.com/image.jpg?sitemap_path=/some/path');
@@ -64,7 +64,7 @@ describe("transformUrl()", function () {
     });
 });
 
-it("transforms a bunch of HTML", function () {
+it('transforms a bunch of HTML', function () {
     $class = new PicPerf();
 
     $html = '
@@ -93,7 +93,7 @@ it("transforms a bunch of HTML", function () {
     ');
 });
 
-it("transforms a bunch of HTML with sitemap path", function () {
+it('transforms a bunch of HTML with sitemap path', function () {
     $class = new PicPerf();
 
     $html = '

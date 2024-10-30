@@ -14,8 +14,7 @@ class PicPerf extends Modifier
     /**
      * Transform a URL or HTML content to use PicPerf URLs.
      *
-     * @param string  $value   The value to be modified
-     * @return string
+     * @param  string  $value   The value to be modified
      */
     public function index(string $content, $params, $context): string
     {

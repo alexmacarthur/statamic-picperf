@@ -8,6 +8,6 @@ trait Configurable
 {
     public function getConfig($key, $default = null)
     {
-        return config(CONFIG_KEY . '.' . $key, $default);
+        return config(CONFIG_KEY.'.'.$key, $default);
     }
 }

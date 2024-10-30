@@ -15,7 +15,8 @@ class RegisterSitemapService
         $robots = $this->getRobotsTxt();
 
         if (strpos($robots, $sitemapLine) !== false) {
-            $this->log("Sitemap already exists in robots.txt file.");
+            $this->log('Sitemap already exists in robots.txt file.');
+
             return;
         }
 
@@ -23,7 +24,7 @@ class RegisterSitemapService
 
         $this->putRobotsTxt($robots);
 
-        $this->log("Sitemap added to robots.txt file.");
+        $this->log('Sitemap added to robots.txt file.');
     }
 
     public function getRobotsTxt()

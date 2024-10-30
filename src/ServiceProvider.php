@@ -14,7 +14,7 @@ class ServiceProvider extends AddonServiceProvider
     ];
 
     protected $routes = [
-        'web' => __DIR__ . '/routes/web.php',
+        'web' => __DIR__.'/routes/web.php',
     ];
 
     protected $middlewareGroups = [
@@ -38,7 +38,7 @@ class ServiceProvider extends AddonServiceProvider
         }
 
         $this->publishes([
-            __DIR__ . '/../config/picperf.php' => config_path('picperf.php'),
+            __DIR__.'/../config/picperf.php' => config_path('picperf.php'),
         ], 'picperf-config');
 
         return $this;
