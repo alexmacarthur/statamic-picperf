@@ -65,7 +65,20 @@ describe('transformUrl()', function () {
 });
 
 it('transforms a bunch of HTML', function () {
-    $class = new PicPerf();
+    $picPerfMock = $this->createPartialMock(PicPerf::class, ['isProduction', 'getEnvironment', 'getConfig']);
+    
+    $picPerfMock->method('isProduction')->willReturn(true);
+    $picPerfMock->method('getEnvironment')->willReturn('production');
+    $picPerfMock->method('getConfig')->willReturnCallback(function ($key, $default = null) {
+        switch ($key) {
+            case 'lower_environments':
+                return [];
+            case 'host':
+                return null;
+            default:
+                return $default;
+        }
+    });
 
     $html = '
         <img src="https://example.com/image.jpg"><img srcset="https://example.com/image-small.jpg 480w, https://example.com/image-big.jpg 800w">
@@ -78,7 +91,7 @@ it('transforms a bunch of HTML', function () {
 
         <div style="background-image=\'https://example.com/image.jpg\'></div>
     ';
-    $result = $class->index($html, [], []);
+    $result = $picPerfMock->index($html, [], []);
 
     expect($result)->toBe('
         <img src="https://picperf.io/https://example.com/image.jpg"><img srcset="https://picperf.io/https://example.com/image-small.jpg 480w, https://picperf.io/https://example.com/image-big.jpg 800w">
@@ -94,7 +107,20 @@ it('transforms a bunch of HTML', function () {
 });
 
 it('transforms a bunch of HTML with sitemap path', function () {
-    $class = new PicPerf();
+    $picPerfMock = $this->createPartialMock(PicPerf::class, ['isProduction', 'getEnvironment', 'getConfig']);
+    
+    $picPerfMock->method('isProduction')->willReturn(true);
+    $picPerfMock->method('getEnvironment')->willReturn('production');
+    $picPerfMock->method('getConfig')->willReturnCallback(function ($key, $default = null) {
+        switch ($key) {
+            case 'lower_environments':
+                return [];
+            case 'host':
+                return null;
+            default:
+                return $default;
+        }
+    });
 
     $html = '
         <img src="https://example.com/image.jpg"><img srcset="https://example.com/image-small.jpg 480w, https://example.com/image-big.jpg 800w">
@@ -107,7 +133,7 @@ it('transforms a bunch of HTML with sitemap path', function () {
 
         <div style="background-image=\'https://example.com/image.jpg\'></div>
     ';
-    $result = $class->index($html, [0 => 'add_to_sitemap'], [
+    $result = $picPerfMock->index($html, [0 => 'add_to_sitemap'], [
         'current_uri' => '/some/path',
     ]);
 
