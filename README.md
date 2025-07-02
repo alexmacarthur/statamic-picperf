@@ -6,7 +6,7 @@
 
 - Automatically reformat images to modern, lightweight formats like AVIF and WebP.
 - Serve the modern format that's _actually_ lighter, and only if your visitor's browser supports it.
-- Aggressively cache the bananas out of your images starting from the browser, all the way up to the global CDN.
+- Aggressively cache the bananas out of your images starting from the browser, all the way up to the best global CDN out there.
 - The original versions of your images remain untouched.
 - Use the [auto-generated sitemap](https://picperf.io/docs/sitemap) for an extra boost of SEO.
 
@@ -14,7 +14,7 @@
 
 ### Create an account.
 
-In order to benefit from this addon, you'll need to first create an account at [PicPerf](https://picperf.io). A 14-day free trial is available, but in order keep your images fast & globally available beyond that, upgrade to a regular plan.
+In order to benefit from this addon, you'll need to first create an account at [PicPerf](https://picperf.io). 14-day free trial!
 
 ### Add your domain.
 
@@ -31,6 +31,39 @@ composer require picperf/statamic-picperf
 ## How to Use
 
 Out of the box, you need to do nothing. The addon will prefix all image URLs with `https://picperf.io`, allowing them to be automatically optimized & globally cached. Specifically, only the images in HTML `<img>` tags (including responsive images), inline `style` attributes, and CSS within `<style>` tags will be transformed. Image URLs in separate `.css` files or those injected with client-side JavaScript will not be affected.
+
+### Publishing Your Configuration
+
+If you need to customize the addon's behavior, you can publish the configuration file to your project:
+
+```bash
+php artisan vendor:publish --tag=picperf-config
+```
+
+This will copy the `picperf.php` configuration file to your `config/` directory, where you can modify it as needed.
+
+### Local Development
+
+In order for prefixed images to load, PicPerf requires them to be publicly available, which is likely not the case when working locally. To address this, in local development, all images that _will be_ optimized with PicPerf will have the `picperf_local=true` query parameter:
+
+```
+https://example.com/my-image.jpg?picperf_local=true
+```
+
+This behavior will only occur in lower environments &mdash; by default, defined as either `local` or `testing`. If you'd like to change the environments where local images will be loaded, modify the `lower_enviornments` configuration option:
+
+```php
+<?php
+
+// config/picperf.php
+
+return [
+    'lower_environments' => [
+        'local',
+        'testing'
+    ],
+];
+```
 
 ### Disabling Universal Transformation
 

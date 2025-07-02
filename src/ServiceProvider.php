@@ -50,7 +50,7 @@ class ServiceProvider extends AddonServiceProvider
             (new RegisterSitemapService())->handle();
         })->purpose('Add the PicPerf sitemap to your robots.txt file.');
 
-        Statamic::afterInstalled(function ($command) {
+        Statamic::afterInstalled(function () {
             (new RegisterSitemapService())->handle();
         });
     }

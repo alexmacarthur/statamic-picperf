@@ -5,6 +5,21 @@ namespace PicPerf\StatamicPicPerf;
 class TestClass
 {
     use \PicPerf\StatamicPicPerf\Trait\Transformable;
+
+    public function getEnvironment(): string
+    {
+        return 'local';
+    }
+
+    public function isProduction(): bool
+    {
+        return false;
+    }
+
+    public function getConfig($key, $default = null)
+    {
+        return [];
+    }
 }
 
 $testClass = new TestClass();
@@ -36,7 +51,16 @@ describe('transforming URLs', function () use ($testClass) {
 
     it('returns the same URL if it is a relative path', function () use ($testClass) {
         $partialMock = $this->createPartialMock($testClass::class, ['getConfig']);
-        $partialMock->method('getConfig')->willReturn('https://macarthur.me');
+        $partialMock->method('getConfig')->willReturnCallback(function ($key, $default = null) {
+            switch ($key) {
+                case 'host':
+                    return 'https://macarthur.me';
+                case 'lower_environments':
+                    return [];
+                default:
+                    return $default;
+            }
+        });
 
         $result = $partialMock->transformUrl('/something.jpg');
 
@@ -45,7 +69,16 @@ describe('transforming URLs', function () use ($testClass) {
 
     it('returns the same value if it is an invalid URL, even if there is a host configured', function () use ($testClass) {
         $partialMock = $this->createPartialMock($testClass::class, ['getConfig']);
-        $partialMock->method('getConfig')->willReturn('https://macarthur.me');
+        $partialMock->method('getConfig')->willReturnCallback(function ($key, $default = null) {
+            switch ($key) {
+                case 'host':
+                    return 'https://macarthur.me';
+                case 'lower_environments':
+                    return [];
+                default:
+                    return $default;
+            }
+        });
 
         $result = $partialMock->transformUrl('blahblahblah');
 
@@ -54,7 +87,16 @@ describe('transforming URLs', function () use ($testClass) {
 
     it('returns the same url if a host is not configured', function () use ($testClass) {
         $partialMock = $this->createPartialMock($testClass::class, ['getConfig']);
-        $partialMock->method('getConfig')->willReturn(null);
+        $partialMock->method('getConfig')->willReturnCallback(function ($key, $default = null) {
+            switch ($key) {
+                case 'host':
+                    return null;
+                case 'lower_environments':
+                    return [];
+                default:
+                    return $default;
+            }
+        });
 
         $result = $partialMock->transformUrl('/something.jpg');
 
@@ -77,7 +119,16 @@ describe('transforming <img> tags', function () use ($testClass) {
 
     it('transforms relative paths correctly when host is set', function () use ($testClass) {
         $partialMock = $this->createPartialMock($testClass::class, ['getConfig']);
-        $partialMock->method('getConfig')->willReturn('https://macarthur.me');
+        $partialMock->method('getConfig')->willReturnCallback(function ($key, $default = null) {
+            switch ($key) {
+                case 'host':
+                    return 'https://macarthur.me';
+                case 'lower_environments':
+                    return [];
+                default:
+                    return $default;
+            }
+        });
 
         $result = $partialMock->transformMarkup("<img src='/something.jpg' style='display: block;' />");
 

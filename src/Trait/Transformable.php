@@ -2,13 +2,14 @@
 
 namespace PicPerf\StatamicPicPerf\Trait;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use PicPerf\StatamicPicPerf\Constants;
+use PicPerf\StatamicPicPerf\Trait\Environmentable;
 
 trait Transformable
 {
-    use Urlable, Configurable;
+    use Urlable, Configurable, Environmentable;
 
     public function transformUrl(string $url, ?string $sitemapPath = null): string
     {
@@ -24,6 +25,12 @@ trait Transformable
     private function purelyTransform(string $url): string
     {
         try {
+            // In order to view images in local development,
+            // return the actual image URL in local environments.
+            if(in_array($this->getEnvironment(), $this->getConfig('lower_environments', []))) {
+                return $this->appendQueryParams($url, ['picperf_local' => "true"]);
+            }
+
             $urlString = Str::of($url);
 
             // It already starts with the PicPerf host.
@@ -32,7 +39,7 @@ trait Transformable
             }
 
             // It's not a valid URL.
-            if (! $this->isValidUrl($url)) {
+            if (!$this->isValidUrl($url)) {
                 return $url;
             }
 
@@ -43,7 +50,7 @@ trait Transformable
                     ->replaceEnd('/', '')
                     ->toString();
 
-                if (! empty($configuredHost)) {
+                if (!empty($configuredHost)) {
                     return $urlString
                         ->prepend($configuredHost)
                         ->prepend(Constants::PIC_PERF_HOST)
