@@ -4,11 +4,14 @@ namespace PicPerf\StatamicPicPerf;
 
 use Illuminate\Support\Facades\Artisan;
 use PicPerf\StatamicPicPerf\Service\RegisterSitemapService;
+use PicPerf\StatamicPicPerf\Trait\Configurable;
 use Statamic\Providers\AddonServiceProvider;
 use Statamic\Statamic;
 
 class ServiceProvider extends AddonServiceProvider
 {
+    use Configurable;
+
     protected $modifiers = [
         Modifier\PicPerf::class,
     ];
@@ -52,6 +55,10 @@ class ServiceProvider extends AddonServiceProvider
         Artisan::command('picperf:register-sitemap', function () {
             (new RegisterSitemapService)->handle();
         })->purpose('Add the PicPerf sitemap to your robots.txt file.');
+
+        if (! $this->getConfig('register_sitemap', true)) {
+            return;
+        }
 
         Statamic::afterInstalled(function () {
             (new RegisterSitemapService)->handle();

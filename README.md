@@ -146,7 +146,7 @@ Again, this will cause the `sitemap_path` parameter to be appended with the curr
 
 #### Auto-Registered Sitemap Endpoint
 
-By default, this addon will automatically register an image sitemap route at `https://ur-site.com/picperf/sitemap`. All this does is proxy the contents of the auto-generated sitemap at `https://picperf.io/sitemap/ur-site.com`. The benefit, however, is that Google will be able to successfully parse it since it'll be served from your domain.
+By default, this addon will automatically register an image sitemap route at `https://ur-site.com/picperf/sitemap.xml`. All this does is proxy the contents of the auto-generated sitemap at `https://picperf.io/sitemap/ur-site.com`. The benefit, however, is that Google will be able to successfully parse it since it'll be served from your domain.
 
 If you _don't_ want a sitemap endpoint to be registered, set the `register_sitemap` configuration key to `false`:
 
