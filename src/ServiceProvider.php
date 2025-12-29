@@ -31,10 +31,13 @@ class ServiceProvider extends AddonServiceProvider
 
     protected function bootAddonConfig(): self
     {
-        $configPath = config_path('picperf.php');
+        // Always load the package's default config first.
+        $this->mergeConfigFrom(__DIR__.'/../config/picperf.php', 'statamic-picperf');
 
-        if (file_exists($configPath)) {
-            $this->mergeConfigFrom($configPath, 'statamic-picperf');
+        // Merge any published config overrides.
+        $publishedConfigPath = config_path('picperf.php');
+        if (file_exists($publishedConfigPath)) {
+            $this->mergeConfigFrom($publishedConfigPath, 'statamic-picperf');
         }
 
         $this->publishes([
