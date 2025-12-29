@@ -22,7 +22,7 @@ class TestClass
     }
 }
 
-$testClass = new TestClass();
+$testClass = new TestClass;
 
 describe('transforming URLs', function () use ($testClass) {
     it('returns same URL in local environment', function () use ($testClass) {

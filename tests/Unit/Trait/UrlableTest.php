@@ -2,7 +2,7 @@
 
 namespace PicPerf\StatamicPicPerf;
 
-$testClass = new class()
+$testClass = new class
 {
     use \PicPerf\StatamicPicPerf\Trait\Urlable;
 };

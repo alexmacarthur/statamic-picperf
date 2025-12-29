@@ -1,7 +1,7 @@
 {
   "name": "picperf/statamic-picperf",
   "license": "MIT",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "autoload": {
     "psr-4": {
       "PicPerf\\StatamicPicPerf\\": "src"
@@ -20,7 +20,8 @@
   },
   "require-dev": {
     "pestphp/pest": "^2.34",
-    "mockery/mockery": "^1.6"
+    "mockery/mockery": "^1.6",
+    "laravel/pint": "^1.26"
   },
   "config": {
     "allow-plugins": {

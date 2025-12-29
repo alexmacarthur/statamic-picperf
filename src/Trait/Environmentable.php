@@ -12,5 +12,5 @@ trait Environmentable
     public function getEnvironment(): string
     {
         return app()->environment();
-    }  
+    }
 }

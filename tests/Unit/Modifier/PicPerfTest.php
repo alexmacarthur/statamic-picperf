@@ -66,7 +66,7 @@ describe('transformUrl()', function () {
 
 it('transforms a bunch of HTML', function () {
     $picPerfMock = $this->createPartialMock(PicPerf::class, ['isProduction', 'getEnvironment', 'getConfig']);
-    
+
     $picPerfMock->method('isProduction')->willReturn(true);
     $picPerfMock->method('getEnvironment')->willReturn('production');
     $picPerfMock->method('getConfig')->willReturnCallback(function ($key, $default = null) {
@@ -108,7 +108,7 @@ it('transforms a bunch of HTML', function () {
 
 it('transforms a bunch of HTML with sitemap path', function () {
     $picPerfMock = $this->createPartialMock(PicPerf::class, ['isProduction', 'getEnvironment', 'getConfig']);
-    
+
     $picPerfMock->method('isProduction')->willReturn(true);
     $picPerfMock->method('getEnvironment')->willReturn('production');
     $picPerfMock->method('getConfig')->willReturnCallback(function ($key, $default = null) {

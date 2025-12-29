@@ -7,9 +7,9 @@ use PicPerf\StatamicPicPerf\Middleware\TransformHtml;
 it('returns early when it is not a GET request', function () {
     $partialMock = $this->createPartialMock(TransformHtml::class, ['getConfig', 'transformMarkup']);
 
-    $request = new \Illuminate\Http\Request();
+    $request = new \Illuminate\Http\Request;
     $request->setMethod('POST');
-    $response = new \Illuminate\Http\Response();
+    $response = new \Illuminate\Http\Response;
     $response->headers->set('content-type', 'text/html');
 
     $next = function () use ($response) {
@@ -26,9 +26,9 @@ it('returns early when it is not a GET request', function () {
 it('returns early when it is not a HTML response', function () {
     $partialMock = $this->createPartialMock(TransformHtml::class, ['getConfig', 'transformMarkup']);
 
-    $request = new \Illuminate\Http\Request();
+    $request = new \Illuminate\Http\Request;
     $request->setMethod('POST');
-    $response = new \Illuminate\Http\Response();
+    $response = new \Illuminate\Http\Response;
     $response->headers->set('content-type', 'application/json');
 
     $next = function () use ($response) {
@@ -45,9 +45,9 @@ it('returns early when it is not a HTML response', function () {
 it('returns early when config option is disabled', function () {
     $partialMock = $this->createPartialMock(TransformHtml::class, ['getConfig', 'transformMarkup']);
 
-    $request = new \Illuminate\Http\Request();
+    $request = new \Illuminate\Http\Request;
     $request->setMethod('GET');
-    $response = new \Illuminate\Http\Response();
+    $response = new \Illuminate\Http\Response;
     $response->headers->set('content-type', 'text/html');
 
     $next = function () use ($response) {
@@ -65,13 +65,13 @@ it('returns early when config option is disabled', function () {
 
 it('transforms the HTML', function () {
     $partialMock = $this->createPartialMock(TransformHtml::class, [
-        'getConfig', 
-        'transformUrl'
+        'getConfig',
+        'transformUrl',
     ]);
 
-    $request = new \Illuminate\Http\Request();
+    $request = new \Illuminate\Http\Request;
     $request->setMethod('GET');
-    $response = new \Illuminate\Http\Response();
+    $response = new \Illuminate\Http\Response;
     $response->headers->set('content-type', 'text/html');
     $response->setContent('<img src="https://example.com/image.jpg">');
 
@@ -90,14 +90,14 @@ it('transforms the HTML', function () {
 describe('adding sitemap_path', function () {
     it('adds root path when on home page', function () {
         $partialMock = $this->createPartialMock(TransformHtml::class, [
-            'getConfig', 
-            'transformUrl'
+            'getConfig',
+            'transformUrl',
         ]);
 
-        $request = new \Illuminate\Http\Request();
+        $request = new \Illuminate\Http\Request;
         $request->setMethod('GET');
         $request->server->set('REQUEST_URI', '/');
-        $response = new \Illuminate\Http\Response();
+        $response = new \Illuminate\Http\Response;
         $response->headers->set('content-type', 'text/html');
         $response->setContent('<img src="https://example.com/image.jpg">');
 
@@ -106,17 +106,23 @@ describe('adding sitemap_path', function () {
         };
 
         $partialMock->method('getConfig')
-            ->willReturnCallback(function($key, $default = null) {
-                if ($key === 'transform_all_markup') return true;
-                if ($key === 'add_sitemap_paths') return true;
+            ->willReturnCallback(function ($key, $default = null) {
+                if ($key === 'transform_all_markup') {
+                    return true;
+                }
+                if ($key === 'add_sitemap_paths') {
+                    return true;
+                }
+
                 return $default;
             });
-        
+
         $partialMock->method('transformUrl')
-            ->willReturnCallback(function($url, $sitemapPath = null) {
+            ->willReturnCallback(function ($url, $sitemapPath = null) {
                 if ($sitemapPath) {
-                    return 'https://picperf.io/https://example.com/image.jpg?sitemap_path=' . urlencode($sitemapPath);
+                    return 'https://picperf.io/https://example.com/image.jpg?sitemap_path='.urlencode($sitemapPath);
                 }
+
                 return 'https://picperf.io/https://example.com/image.jpg';
             });
 
@@ -127,14 +133,14 @@ describe('adding sitemap_path', function () {
 
     it('adds non-root path when on home page', function () {
         $partialMock = $this->createPartialMock(TransformHtml::class, [
-            'getConfig', 
-            'transformUrl'
+            'getConfig',
+            'transformUrl',
         ]);
 
-        $request = new \Illuminate\Http\Request();
+        $request = new \Illuminate\Http\Request;
         $request->setMethod('GET');
         $request->server->set('REQUEST_URI', '/some/other/page?with=query');
-        $response = new \Illuminate\Http\Response();
+        $response = new \Illuminate\Http\Response;
         $response->headers->set('content-type', 'text/html');
         $response->setContent('<img src="https://example.com/image.jpg">');
 
@@ -143,17 +149,23 @@ describe('adding sitemap_path', function () {
         };
 
         $partialMock->method('getConfig')
-            ->willReturnCallback(function($key, $default = null) {
-                if ($key === 'transform_all_markup') return true;
-                if ($key === 'add_sitemap_paths') return true;
+            ->willReturnCallback(function ($key, $default = null) {
+                if ($key === 'transform_all_markup') {
+                    return true;
+                }
+                if ($key === 'add_sitemap_paths') {
+                    return true;
+                }
+
                 return $default;
             });
-        
+
         $partialMock->method('transformUrl')
-            ->willReturnCallback(function($url, $sitemapPath = null) {
+            ->willReturnCallback(function ($url, $sitemapPath = null) {
                 if ($sitemapPath) {
-                    return 'https://picperf.io/https://example.com/image.jpg?sitemap_path=' . urlencode($sitemapPath);
+                    return 'https://picperf.io/https://example.com/image.jpg?sitemap_path='.urlencode($sitemapPath);
                 }
+
                 return 'https://picperf.io/https://example.com/image.jpg';
             });
 

@@ -50,11 +50,11 @@ class ServiceProvider extends AddonServiceProvider
     protected function setUpSitemap()
     {
         Artisan::command('picperf:register-sitemap', function () {
-            (new RegisterSitemapService())->handle();
+            (new RegisterSitemapService)->handle();
         })->purpose('Add the PicPerf sitemap to your robots.txt file.');
 
         Statamic::afterInstalled(function () {
-            (new RegisterSitemapService())->handle();
+            (new RegisterSitemapService)->handle();
         });
     }
 }

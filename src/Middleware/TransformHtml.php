@@ -11,7 +11,7 @@ use PicPerf\StatamicPicPerf\Trait\Transformable;
 
 class TransformHtml
 {
-    use Transformable, Configurable;
+    use Configurable, Transformable;
 
     public function handle(Request $request, Closure $next): Response
     {
