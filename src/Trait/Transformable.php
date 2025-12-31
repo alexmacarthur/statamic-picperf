@@ -12,13 +12,19 @@ trait Transformable
 
     public function transformUrl(string $url, ?string $sitemapPath = null): string
     {
-        $url = $this->purelyTransform($url);
-
-        if ($sitemapPath) {
-            return str_replace('%2F', '/', $this->appendQueryParams($url, ['sitemap_path' => $sitemapPath]));
+        // Already has sitemap_path, skip to prevent double transformation.
+        if (str_contains($url, 'sitemap_path=')) {
+            return $url;
         }
 
-        return $url;
+        $transformedUrl = $this->purelyTransform($url);
+
+        // Only add sitemap_path if the URL was actually transformed to use PicPerf.
+        if ($sitemapPath && str_starts_with($transformedUrl, Constants::PIC_PERF_HOST)) {
+            return str_replace('%2F', '/', $this->appendQueryParams($transformedUrl, ['sitemap_path' => $sitemapPath]));
+        }
+
+        return $transformedUrl;
     }
 
     private function purelyTransform(string $url): string
