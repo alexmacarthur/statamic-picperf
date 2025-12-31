@@ -1,7 +1,7 @@
 {
   "name": "picperf/statamic-picperf",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "autoload": {
     "psr-4": {
       "PicPerf\\StatamicPicPerf\\": "src"
