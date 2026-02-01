@@ -1,7 +1,7 @@
 {
   "name": "picperf/statamic-picperf",
   "license": "MIT",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "autoload": {
     "psr-4": {
       "PicPerf\\StatamicPicPerf\\": "src"
@@ -19,8 +19,8 @@
     }
   },
   "require-dev": {
-    "pestphp/pest": "^2.34",
-    "mockery/mockery": "^1.6",
+    "pestphp/pest": "^3.0",
+    "mockery/mockery": "^2.0@dev",
     "laravel/pint": "^1.26"
   },
   "config": {
@@ -31,6 +31,6 @@
   },
   "require": {
     "illuminate/support": "*",
-    "statamic/cms": "^3.2|^4.0|^5.0"
+    "statamic/cms": "^3.2|^4.0|^5.0|^6.0"
   }
 }
