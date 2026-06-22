@@ -108,6 +108,23 @@ describe('transforming URLs', function () use ($testClass) {
 
         expect($result)->toBe('https://picperf.io/http://urmom.com/something.jpg?sitemap_path=/some/path');
     });
+
+    it('does not append sitemap_path when the url already has one', function () use ($testClass) {
+        $url = 'https://picperf.io/https://launchpoint.mortgage/assets/logo.png?sitemap_path=/';
+
+        $result = $testClass->transformUrl($url, '/');
+
+        expect($result)->toBe($url);
+    });
+
+    it('does not double sitemap_path when markup is transformed twice', function () use ($testClass) {
+        $markup = '<img src="https://picperf.io/https://launchpoint.mortgage/assets/barrett-logo-color.png?sitemap_path=/" />';
+
+        $result = $testClass->transformMarkup($markup, '/');
+
+        expect($result)->toBe($markup);
+        expect($result)->not->toContain('sitemap_path=/?sitemap_path=');
+    });
 });
 
 describe('transforming <img> tags', function () use ($testClass) {

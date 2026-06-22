@@ -12,8 +12,11 @@ trait Transformable
 
     public function transformUrl(string $url, ?string $sitemapPath = null): string
     {
-        // Already has sitemap_path, skip to prevent double transformation.
-        if (str_contains($url, 'sitemap_path=')) {
+        if (str_starts_with($url, Constants::PIC_PERF_HOST)) {
+            return $url;
+        }
+
+        if ($this->urlHasSitemapPath($url)) {
             return $url;
         }
 
@@ -122,5 +125,18 @@ trait Transformable
                 return $this->transformUrl($subMatch[0], $sitemapPath);
             }, $match[0]);
         }, $content);
+    }
+
+    private function urlHasSitemapPath(string $url): bool
+    {
+        $query = parse_url($url, PHP_URL_QUERY);
+
+        if (! is_string($query) || $query === '') {
+            return false;
+        }
+
+        parse_str($query, $params);
+
+        return array_key_exists('sitemap_path', $params);
     }
 }
