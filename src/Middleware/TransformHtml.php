@@ -4,8 +4,8 @@ namespace PicPerf\StatamicPicPerf\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 use PicPerf\StatamicPicPerf\Trait\Configurable;
 use PicPerf\StatamicPicPerf\Trait\Transformable;
 

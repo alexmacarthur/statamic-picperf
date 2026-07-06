@@ -4,6 +4,24 @@ namespace PicPerf\StatamicPicPerf;
 
 use PicPerf\StatamicPicPerf\Middleware\TransformHtml;
 
+it('passes through JsonResponse from non-GET routes', function () {
+    $partialMock = $this->createPartialMock(TransformHtml::class, ['getConfig', 'transformMarkup']);
+
+    $request = new \Illuminate\Http\Request;
+    $request->setMethod('POST');
+    $response = new \Illuminate\Http\JsonResponse(['csrf' => 'token-value']);
+
+    $next = function () use ($response) {
+        return $response;
+    };
+
+    $partialMock->expects($this->never())->method('transformMarkup');
+
+    $result = $partialMock->handle($request, $next);
+
+    expect($result)->toBe($response);
+});
+
 it('returns early when it is not a GET request', function () {
     $partialMock = $this->createPartialMock(TransformHtml::class, ['getConfig', 'transformMarkup']);
 
